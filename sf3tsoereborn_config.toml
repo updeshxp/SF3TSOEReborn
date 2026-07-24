@@ -1,0 +1,25 @@
+# sf3tsoereborn - ReXGlue codegen config
+#
+# Add named functions (indirect-call targets), midasm hooks, and CRT
+# addresses here once they are located in assets/default.xex.
+#
+# Example:
+#   [functions]
+#   0x8XXXXXXX = {name = "MyFunction"}
+#
+#   [[midasm_hook]]
+#   address = 0x8XXXXXXX
+#   name = "MyHook"
+#   registers = ["r3"]
+#   return = true
+#
+#   [rexcrt]
+#   memcpy  = 0x8XXXXXXX
+#   memset  = 0x8XXXXXXX
+#   memmove = 0x8XXXXXXX
+
+[functions]
+0x826070F8 = {} # prevents the game from compiling
+0x826E41A8 = {} # prevents the game from starting
+0x82328F28 = {} # compiler warning unresolved function
+

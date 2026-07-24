@@ -1,4 +1,4 @@
-name: Build thedarkness
+name: Build sf3tsoereborn
 
 on:
   workflow_call:
@@ -20,8 +20,8 @@ on:
 
 env:
   ASSETS_REPO: ${{ vars.ASSETS_REPO }}
-  ASSET_PATH: default.xex
-  ASSET_CACHE_KEY: codegen-assets-v1
+  CODEGEN_ASSETS: default.xex Gameicon.png
+  ASSET_CACHE_KEY: codegen-assets-v2
   TU_ASSET_CACHE_KEY: tu-assets-v1
 
 jobs:
@@ -33,25 +33,23 @@ jobs:
       matrix:
         platform:
           - windows-x64
-          # Linux builds temporarily disabled
-          # - linux-x64
-          # - linux-arm64
+          - linux-x64
+          - linux-arm64
         include:
           - platform: windows-x64
             runner: windows-latest
             sdk_dir: win-amd64
             artifact_suffix: windows-x64
 
-          # Linux builds temporarily disabled
-          # - platform: linux-x64
-          #   runner: ubuntu-latest
-          #   sdk_dir: linux-amd64
-          #   artifact_suffix: linux-x64
+          - platform: linux-x64
+            runner: ubuntu-latest
+            sdk_dir: linux-amd64
+            artifact_suffix: linux-x64
 
-          # - platform: linux-arm64
-          #   runner: ubuntu-24.04-arm
-          #   sdk_dir: linux-arm64
-          #   artifact_suffix: linux-arm64
+          - platform: linux-arm64
+            runner: ubuntu-24.04-arm
+            sdk_dir: linux-arm64
+            artifact_suffix: linux-arm64
 
     steps:
       - name: Checkout
@@ -78,49 +76,78 @@ jobs:
           variant: sccache
           key: ${{ matrix.platform }}-amd64
 
-      - name: Cache XEX asset for codegen
+      - name: Cache codegen assets
         id: asset-cache
         uses: actions/cache@v5
         with:
-          path: assets/${{ env.ASSET_PATH }}
+          path: |
+            assets/default.xex
+            assets/Gameicon.png
           key: ${{ env.ASSET_CACHE_KEY }}
 
-      - name: Fetch XEX asset
+      - name: Fetch codegen assets
         if: steps.asset-cache.outputs.cache-hit != 'true'
         env:
           GH_TOKEN: ${{ secrets.ASSETS_TOKEN }}
         shell: bash
         run: |
           mkdir -p assets
-          gh api -H "Accept: application/vnd.github.raw" \
-            "repos/${{ env.ASSETS_REPO }}/contents/${{ env.ASSET_PATH }}" \
-            > "assets/${{ env.ASSET_PATH }}"
-          size=$(wc -c < "assets/${{ env.ASSET_PATH }}")
-          echo "Fetched ${{ env.ASSET_PATH }} ($size bytes)"
-          [ "$size" -ge 1048576 ] || { echo "Asset too small — fetch likely failed"; exit 1; }
+          for asset in ${{ env.CODEGEN_ASSETS }}; do
+            gh api -H "Accept: application/vnd.github.raw" \
+              "repos/${{ env.ASSETS_REPO }}/contents/${asset}" \
+              > "assets/${asset}"
+            size=$(wc -c < "assets/${asset}")
+            echo "Fetched ${asset} (${size} bytes)"
+            if [ "${asset}" = "default.xex" ]; then
+              [ "$size" -ge 1048576 ] || { echo "Asset too small — fetch likely failed"; exit 1; }
+            else
+              [ "$size" -gt 0 ] || { echo "Asset is empty — fetch likely failed"; exit 1; }
+            fi
+          done
 
-      # - name: Cache TU packages
-      #   id: tu-cache
-      #   uses: actions/cache@v5
-      #   with:
-      #     path: tu_packages/
-      #     key: ${{ env.TU_ASSET_CACHE_KEY }}
+      - name: Cache TU packages
+        id: tu-cache
+        if: matrix.platform != 'linux-arm64'
+        uses: actions/cache@v5
+        with:
+          path: tu_packages/
+          key: ${{ env.TU_ASSET_CACHE_KEY }}
 
-      # - name: Fetch TU packages
-      #   if: steps.tu-cache.outputs.cache-hit != 'true'
-      #   env:
-      #     GH_TOKEN: ${{ secrets.ASSETS_TOKEN }}
-      #   shell: bash
-      #   run: |
-      #     mkdir -p tu_packages
-      #     files=$(gh api "repos/${{ env.ASSETS_REPO }}/contents" \
-      #       --jq '.[] | select(.name | startswith("TU_")) | .name')
-      #     for f in $files; do
-      #       gh api -H "Accept: application/vnd.github.raw" \
-      #         "repos/${{ env.ASSETS_REPO }}/contents/${f}" \
-      #         > "tu_packages/${f}"
-      #       echo "Fetched ${f} ($(wc -c < "tu_packages/${f}") bytes)"
-      #     done
+      - name: Fetch TU packages
+        if: matrix.platform != 'linux-arm64' && steps.tu-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ASSETS_TOKEN }}
+        shell: bash
+        run: |
+          mkdir -p tu_packages
+
+          files=$(gh api "repos/${{ env.ASSETS_REPO }}/contents" \
+            --jq '.[] | select(.name | startswith("TU_")) | .name')
+
+          if [ -z "$files" ]; then
+            echo "No TU packages found."
+            exit 0
+          fi
+
+          for f in $files; do
+            gh api -H "Accept: application/vnd.github.raw" \
+              "repos/${{ env.ASSETS_REPO }}/contents/${f}" \
+              > "tu_packages/${f}"
+            echo "Fetched ${f} ($(wc -c < "tu_packages/${f}") bytes)"
+          done
+      
+      - name: Detect TU packages
+        id: tu
+        if: matrix.platform != 'linux-arm64'
+        shell: bash
+        run: |
+          if compgen -G "tu_packages/TU_*" > /dev/null; then
+            echo "has_tu=true" >> "$GITHUB_OUTPUT"
+            echo "TU packages detected."
+          else
+            echo "has_tu=false" >> "$GITHUB_OUTPUT"
+            echo "No TU packages detected. TU build will be skipped."
+          fi
 
       # Download the SDK once per platform/arch and reuse it for both the
       # vanilla and TU builds below, instead of each variant fetching its
@@ -140,7 +167,7 @@ jobs:
           if [ "${{ inputs.publish_mode }}" = "artifact" ]; then
             out="${{ inputs.artifact_name }}-${{ matrix.artifact_suffix }}"
           else
-            out="thedarkness-${{ inputs.tag }}-${{ matrix.artifact_suffix }}"
+            out="sf3tsoereborn-${{ inputs.tag }}-${{ matrix.artifact_suffix }}"
           fi
           python scripts/build.py --package "${out}"
 
@@ -160,35 +187,37 @@ jobs:
           path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
 
-      # - name: Build (tu)
-      #   shell: bash
-      #   run: python scripts/build.py --release --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
+      - name: Build (tu)
+        if: matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        shell: bash
+        run: python scripts/build.py --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
 
-      # - name: Package (tu)
-      #   shell: bash
-      #   run: |
-      #     if [ "${{ inputs.publish_mode }}" = "artifact" ]; then
-      #       out="${{ inputs.artifact_name }}-tu-${{ matrix.artifact_suffix }}"
-      #     else
-      #       out="thedarkness-tu-${{ inputs.tag }}-${{ matrix.artifact_suffix }}"
-      #     fi
-      #     python scripts/build.py --package "${out}"
+      - name: Package (tu)
+        if: matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        shell: bash
+        run: |
+          if [ "${{ inputs.publish_mode }}" = "artifact" ]; then
+            out="${{ inputs.artifact_name }}-tu-${{ matrix.artifact_suffix }}"
+          else
+            out="sf3tsoereborn-tu-${{ inputs.tag }}-${{ matrix.artifact_suffix }}"
+          fi
+          python scripts/build.py --package "${out}"
 
-      # - name: Upload CI artifact (tu)
-      #   if: inputs.publish_mode == 'artifact'
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ inputs.artifact_name }}-tu-${{ matrix.artifact_suffix }}
-      #     path: pkg/
-      #     if-no-files-found: error
+      - name: Upload CI artifact (tu)
+        if: inputs.publish_mode == 'artifact' && matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}-tu-${{ matrix.artifact_suffix }}
+          path: pkg/
+          if-no-files-found: error
 
-      # - name: Upload release artifact (tu)
-      #   if: inputs.publish_mode == 'release'
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: release-tu-${{ matrix.platform }}
-      #     path: ${{ env.ARTIFACT_PATH }}
-      #     if-no-files-found: error
+      - name: Upload release artifact (tu)
+        if: inputs.publish_mode == 'release' && matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-tu-${{ matrix.platform }}
+          path: ${{ env.ARTIFACT_PATH }}
+          if-no-files-found: error
 
       - name: sccache stats
         if: always()

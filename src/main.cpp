@@ -1,7 +1,7 @@
-// thedarkness - ReXGlue Recompiled Project
+// sf3tsoereborn - ReXGlue Recompiled Project
 
-#include "generated/default/thedarkness_init.h"
+#include "generated/sf3tsoereborn_init.h"
 
-#include "thedarkness_app.h"
+#include "sf3tsoereborn_app.h"
 
-REX_DEFINE_APP(thedarkness, ThedarknessApp::Create)
+REX_DEFINE_APP(sf3tsoereborn, Sf3tsoerebornApp::Create)

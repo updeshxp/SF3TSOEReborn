@@ -1,0 +1,27 @@
+gpu_plugin = "xenos"
+license_mask = 1
+mnk_capture_mouse = false
+log_level = "trace"
+mnk_mode = true
+game_data_root = "./assets"
+user_data_root = "./data"
+
+keybind_a = "J"					# Low Kick
+keybind_b = "K"					# Mid Kick
+keybind_x = "U"					# Low Punch
+keybind_y = "I"					# Mid Punch
+keybind_left_trigger = "Y"		# L+M+H Kick
+keybind_right_trigger = "L"			# Heavy Kick
+keybind_left_shoulder = "H"			# L+M+H Punch
+keybind_right_shoulder = "O"	# Heavy Punch
+keybind_back = "Escape"					# Select
+keybind_start = "Return"					# Start
+keybind_dpad_up = "Up"
+keybind_dpad_left = "Left"
+keybind_dpad_down = "Down"
+keybind_dpad_right = "Right"
+
+shader_dump_enabled = false
+texture_dump_enabled = false
+texture_dump_format = "png"
+texture_dump_skip_sizes = "512x256,1024x512,2048x1024,1920x1080,1280x720"

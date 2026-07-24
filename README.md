@@ -1,6 +1,7 @@
-# TheDarkness
+# SF3TSOEReborn
 
-Static recompilation of **The Darkness** for Windows, built on the [ReXGlue SDK](https://github.com/rexglue/rexglue-sdk).
+Static recompilation of **Street Fighter III: 3rd Strike Online Edition** (Xbox Live Arcade) for Windows
+and Linux, built on the [ReXGlue SDK](https://github.com/rexglue/rexglue-sdk).
 
 This project converts the Xbox 360 PowerPC `default.xex` into native x86_64
 code at build time, then wraps it with a small host runtime (logging,
@@ -8,13 +9,7 @@ overlays, hooks) so the game runs natively and can be modded like a PC port.
 
 **You must own the game.** This project does **not** ship any copyrighted code, data, or assets. You provide your own legally dumped game.
 
-# Get the game on [Goopie](https://goopie.xyz/#/library/thedarkness)!
-
-## Using a prebuilt release
-
-Using Goopie is preferable, as it makes it trivial to manage the game's assets, versions, mods, achievements, leaderboards, etc.
-
-If you still want to go the hard way, do this:
+Do this:
 
 1. Install Python if you don't have it already
 2. Extract the release you just downloaded
@@ -40,8 +35,8 @@ scoop install llvm cmake ninja
 ### 1. Clone
 
 ```bash
-git clone https://github.com/birabittoh/TheDarkness
-cd TheDarkness
+git clone https://github.com/updeshxp/SF3TSOEReborn
+cd SF3TSOEReborn
 ```
 
 ### 2. Download the ReXGlue SDK
@@ -77,7 +72,7 @@ python scripts/run.py
 ```
 
 This runs the freshly built executable with the correct CLI arguments
-(`--game_data_root=assets`, `--gpu_plugin=xenos`).
+(`--game_data_root=assets`, `--gpu_plugin=xenos`, `--license_mask=1`).
 
 Any extra arguments are forwarded to the executable, e.g.:
 
@@ -87,7 +82,7 @@ python scripts/run.py --vulkan_device 1
 
 ## Options
 
-Options can be persisted by adding them to `thedarkness.toml` next to the game executable, for example:
+Options can be persisted by adding them to `sf3tsoereborn.toml` next to the game executable, for example:
 
 ```toml
 vulkan_device = 1 # NVIDIA GPU
@@ -96,15 +91,12 @@ user_language = 1 # English
 
 ### Keyboard & mouse
 
-Keyboard and mouse controls are enabled by default. All bindings are overridable in the **F4** menu or `thedarkness.toml`. For example:
+Keyboard and mouse controls are enabled by default. All bindings are overridable in the **F4** menu or `sf3tsoereborn.toml`. For example:
 
 ```toml
-keybind_a = "F"
-keybind_left_trigger = "LControl"
-mnk_sensitivity = 10
+keybind_a = "U"
+keybind_left_trigger = "O"
 ```
-
-Mouse sensitivity is controlled by `mnk_sensitivity` (default `1.0`).
 
 ### GPU selection
 
@@ -121,20 +113,20 @@ List available devices by running the game without the flag.
 The game writes logs into the `logs` directory by default, but you can configure it.
 
 ```bash
-python scripts/run.py --log_file thedarkness.log --log_level debug
+python scripts/run.py --log_file sf3tsoereborn.log --log_level debug
 ```
 
 ## Adding a hook
 
 1. Find the guest address in `default.xex`.
-2. Add to `thedarkness_config.toml`:
+2. Add to `sf3tsoereborn_config.toml`:
 
    ```toml
    [functions]
    0x8XXXXXXX = {name = "MyFunction"}
    ```
 
-3. Implement in `src/thedarkness_hooks.cpp` (create if it doesn't exist, and add it to `CMakeLists.txt`):
+3. Implement in `src/sf3tsoereborn_hooks.cpp` (create if it doesn't exist, and add it to `CMakeLists.txt`):
 
    ```cpp
    void MyFunction(PPCContext& ctx, uint8_t* base) {
@@ -154,7 +146,7 @@ registers = ["r3"]
 return = true
 ```
 
-Implement in `src/thedarkness_hooks.cpp`:
+Implement in `src/sf3tsoereborn_hooks.cpp`:
 
 ```cpp
 void MyHook(PPCRegister& r3) {
@@ -165,8 +157,15 @@ void MyHook(PPCRegister& r3) {
 ## Credits
 
 - [ReXGlue SDK](https://github.com/rexglue/rexglue-sdk)
+- [TheDarkness](https://github.com/birabittoh/TheDarkness)
+- [NocturneRecomp](https://github.com/birabittoh/NocturneRecomp)
 
 ## License
 
 The host-side source in `src/`, build scripts, and CI config are available
 under the MIT License.
+
+The recompiled game code produced at build time contains symbols and logic
+from sf3tsoerborn and is **not** redistributable. Do not share
+`default.xex`, the `generated/` directory, or any built binary that links
+against them.

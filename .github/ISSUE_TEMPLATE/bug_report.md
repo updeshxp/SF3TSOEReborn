@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Report a crash or incorrect behaviour in The Darkness
+about: Report a crash or incorrect behaviour in SF3TSOE Reborn
 title: ''
 labels: bug
 assignees: ''
@@ -22,11 +22,11 @@ What you expected to happen instead.
 If applicable, attach screenshots or a short clip.
 
 **Build info**
- - The Darkness version / commit:
+ - SF3TSOE Reborn version / commit:
  - Build config (Release / RelWithDebInfo / Debug):
  - OS: [e.g. Windows 11]
  - GPU: [e.g. RTX 4070]
  - CPU: [e.g. Ryzen 7 7800X3D]
 
 **Log file**
-Attach `logs/thedarkness.log` if the bug is a crash or freeze.
+Attach `logs/sf3tsoereborn.log` if the bug is a crash or freeze.

@@ -1,6 +1,6 @@
 ---
 name: Patch / Mod request
-about: Suggest a patch or mod for The Darkness
+about: Suggest a patch or mod for SF3TSOE Reborn
 title: ''
 labels: enhancement
 assignees: ''

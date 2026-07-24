@@ -1,64 +1,75 @@
-# thedarkness - ReXGlue Recompiled Project
+# sf3tsoereborn - ReXGlue Recompiled Project
 #
 # SDK boilerplate lives in generated/rexglue.cmake.
 
 cmake_minimum_required(VERSION 3.25)
-project(thedarkness LANGUAGES CXX)
+project(sf3tsoereborn LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(generated/rexglue.cmake)
 
+# Project version: the nearest reachable `vX.Y.Z` git tag, not an exact
+# match -- a dev build sitting on commits after v1.2.2 already contains
+# everything v1.2.2 did, so it should still satisfy a mod's
+# `game_version >= 1.2.0` (see sf3tsoereborn_app.h's OnPreSetup and
+# docs/making-mods.md). Falls back to "0.0.0" if git or a reachable tag is
+# unavailable (e.g. a shallow/--depth=1 checkout with no tags fetched); the
+# SDK already treats an unparsable/absent game_version as "can't verify,
+# don't block" for any mod that declares the constraint.
+find_package(Git QUIET)
+set(SF3TSOEREBORN_VERSION "0.0.0")
+if(GIT_EXECUTABLE)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} describe --tags --abbrev=0 --match "v[0-9]*.[0-9]*.[0-9]*"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        OUTPUT_VARIABLE SF3TSOEREBORN_GIT_TAG
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+        RESULT_VARIABLE SF3TSOEREBORN_GIT_TAG_RC)
+    if(SF3TSOEREBORN_GIT_TAG_RC EQUAL 0 AND SF3TSOEREBORN_GIT_TAG MATCHES "^v([0-9]+\\.[0-9]+\\.[0-9]+)$")
+        set(SF3TSOEREBORN_VERSION "${CMAKE_MATCH_1}")
+    endif()
+endif()
+configure_file(
+    ${CMAKE_SOURCE_DIR}/src/version.generated.h.in
+    ${CMAKE_SOURCE_DIR}/src/version.generated.h
+    @ONLY
+)
+
 # Embedded window icon: extracted directly from assets/default.xex (already a
 # required codegen input) so no extra asset needs to be checked in or fetched.
 # src/icon.generated.h is a gitignored build artifact regenerated whenever the
 # XEX or the generator script changes.
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
-set(THEDARKNESS_ICON_HEADER ${CMAKE_SOURCE_DIR}/src/icon.generated.h)
-set(THEDARKNESS_ICON_ICO ${CMAKE_SOURCE_DIR}/src/icon.generated.ico)
+set(SF3TSOEREBORN_ICON_HEADER ${CMAKE_SOURCE_DIR}/src/icon.generated.h)
 add_custom_command(
-    OUTPUT ${THEDARKNESS_ICON_HEADER} ${THEDARKNESS_ICON_ICO}
+    OUTPUT ${SF3TSOEREBORN_ICON_HEADER}
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/gen-icon.py
     DEPENDS
         ${CMAKE_SOURCE_DIR}/scripts/gen-icon.py
         ${CMAKE_SOURCE_DIR}/assets/default.xex
-    COMMENT "Generating src/icon.generated.h and src/icon.generated.ico"
+    COMMENT "Generating src/icon.generated.h"
     VERBATIM
 )
 
-# On Windows, also embed the same icon as the .exe's own resource (Explorer,
-# taskbar before the window opens, Alt-Tab), separate from the in-window icon
-# applied at runtime via Window::SetIcon (see thedarkness_app.h). The .rc
-# needs an absolute path to the .ico since it's not necessarily emitted next
-# to it in an out-of-source build.
-if(WIN32)
-    set(THEDARKNESS_ICON_ICO_PATH ${THEDARKNESS_ICON_ICO})
-    set(THEDARKNESS_ICON_RC ${CMAKE_SOURCE_DIR}/src/thedarkness.generated.rc)
-    configure_file(
-        ${CMAKE_SOURCE_DIR}/src/thedarkness.rc.in
-        ${THEDARKNESS_ICON_RC}
-        @ONLY
-    )
-    # rc.exe needs icon.generated.ico to exist by the time it compiles this
-    # .rc; configure_file only stamped the path into it above, it doesn't
-    # establish a build-order dependency on the custom command that (re)writes
-    # the .ico itself.
-    set_source_files_properties(${THEDARKNESS_ICON_RC} PROPERTIES OBJECT_DEPENDS ${THEDARKNESS_ICON_ICO})
-endif()
-
 # Sources
-set(THEDARKNESS_SOURCES
+set(SF3TSOEREBORN_SOURCES
     src/main.cpp
-    src/hooks/camera_mouselook_hook.cpp
     src/xbox_live.cpp
-    ${THEDARKNESS_ICON_HEADER}
+    ${SF3TSOEREBORN_ICON_HEADER}
+    ${GENERATED_SOURCES}
 )
 
 if(WIN32)
-    add_executable(thedarkness WIN32 ${THEDARKNESS_SOURCES} ${THEDARKNESS_ICON_RC})
+    add_executable(sf3tsoereborn WIN32 ${SF3TSOEREBORN_SOURCES})
 else()
-    add_executable(thedarkness ${THEDARKNESS_SOURCES})
+    add_executable(sf3tsoereborn ${SF3TSOEREBORN_SOURCES})
+    set_target_properties(sf3tsoereborn PROPERTIES
+        BUILD_RPATH "$ORIGIN"
+        INSTALL_RPATH "$ORIGIN"
+    )
 endif()
 
-rexglue_setup_target(thedarkness)
+rexglue_setup_target(sf3tsoereborn)

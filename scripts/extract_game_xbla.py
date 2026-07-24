@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract the local SOTN XBLA STFS package.
+"""Extract the local game XBLA STFS package.
 
 This is intentionally narrow: it extracts the known LIVE/STFS package layout
 used by the XBLA release and writes the files needed by this repository.

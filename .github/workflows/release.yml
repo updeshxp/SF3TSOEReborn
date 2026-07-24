@@ -35,8 +35,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "The Darkness ${{ github.ref_name }}"
-          body: "# Get the game on [Goopie](https://goopie.xyz/#/library/thedarkness)!\n\n"
+          name: "SF3TSOE Reborn ${{ github.ref_name }}"
+          body: "# Currently in-menu only!\n\n"
           files: release-assets/*
           generate_release_notes: true
           fail_on_unmatched_files: true

@@ -9,10 +9,6 @@ import subprocess
 import tomllib
 
 
-SHADER_DIR = "shaders"
-SHADER_NAME = "crt.slang"
-
-
 def detect_preset(build_type="release"):
     os_name = platform.system()
     arch = platform.machine().lower()
@@ -85,7 +81,7 @@ def compute_codegen_hash(manifest, manifest_path):
             while chunk := f.read(1 << 20):
                 h.update(chunk)
 
-    # 2. Include files (e.g. thedarkness_config.toml)
+    # 2. Include files (e.g. sf3tsoereborn_config.toml)
     for inc in manifest["entrypoint"].get("includes", []):
         with open(inc, "rb") as f:
             h.update(f.read())
@@ -145,6 +141,10 @@ def do_package(name, project_name, is_windows):
             print(f"+ cp {src} {pkg_dir}/")
             shutil.copy2(src, pkg_dir)
 
+    # Static options mirror scripts/run.py's fixed CLI flags. game_data_root is
+    # deliberately not set here: the config file overrides CLI args (see the
+    # CVar precedence rules), which would defeat the launcher script's detection
+    # of the assets/update/mods directories below.
     config_path = os.path.join(pkg_dir, f"{project_name}.toml")
     print(f"+ write {config_path}")
     with open(config_path, "w") as f:
@@ -165,18 +165,27 @@ def do_package(name, project_name, is_windows):
         f.write('texture_dump_skip_sizes = "4x4,512x288,1024x576,640x360,1280x720"\n')
         f.write("\n")
         f.write("# Keyboard controls\n")
-        f.write(f'keybind_a = "E"{"\t"*5}# Interact\n')
-        f.write(f'keybind_y = "Space"{"\t"*5}# Jump\n')
-        f.write(f'keybind_left_trigger = "LMB"{"\t"*5}# Left gun\n')
-        f.write(f'keybind_right_trigger = "RMB"{"\t"*5}# Right gun\n')
-        f.write("\n")
+        f.write(f'keybind_a = "J"{"\t"*5}# Low Kick\n')
+        f.write(f'keybind_b = "K"{"\t"*5}# Mid Kick\n') 
+        f.write(f'keybind_x = "U"{"\t"*5}# Low Punch\n')  
+        f.write(f'keybind_y = "I"{"\t"*5}# Mid Punch\n')
+        f.write(f'keybind_left_trigger = "Y"{"\t"*2}# L+M+H Kick\n')   
+        f.write(f'keybind_right_trigger = "L"{"\t"*3}# Heavy Kick\n')
+        f.write(f'keybind_left_shoulder = "H"{"\t"*3}# L+M+H Punch\n')
+        f.write(f'keybind_right_shoulder = "O"{"\t"*1}# Heavy Punch\n')
+        f.write(f'keybind_back = "Escape"{"\t"*5}# Select\n')
+        f.write(f'keybind_start = "Return"{"\t"*5}# Start\n')
+        f.write(f'keybind_dpad_up = "Up"\n')
+        f.write(f'keybind_dpad_left = "Left"\n')
+        f.write(f'keybind_dpad_down = "Down"\n')   
+        f.write(f'keybind_dpad_right = "Right"\n')
         f.write("\n")
         f.write("# Danger zone\n")
-        f.write("gpu_plugin = \"xenos\"\n")
+        f.write('gpu_plugin = "xenos"\n')
         f.write("gpu_allow_invalid_fetch_constants = true\n")
-        f.write("game_data_root = \"assets\"\n")
-        f.write("update_data_root = \"update\"\n")
-        f.write("mods_data_root = \"mods\"\n")
+        f.write('game_data_root = "assets"\n')
+        f.write('user_data_root = "data\"\n')
+        f.write("license_mask = 1\n")
         f.write("mnk_mode = true\n")
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -340,7 +349,7 @@ def main():
     codegen_manifest = manifest_path
     if args.tu:
         tu_version = stage_title_update(args.tu, xex_path)
-        tu_config = "thedarkness_tu_config.toml"
+        tu_config = "sf3tsoereborn_tu_config.toml"
         if not os.path.exists(tu_config):
             print(f"error: {tu_config} not found (needed for --tu codegen)", file=sys.stderr)
             sys.exit(1)
@@ -363,7 +372,7 @@ def main():
         f"-DCMAKE_CXX_COMPILER={cxx_compiler}",
         # Always set explicitly so switching between TU and vanilla builds doesn't
         # inherit a stale value from the CMake cache.
-        f"-DTHEDARKNESS_TU={'ON' if args.tu else 'OFF'}",
+        f"-DSF3TSOEREBORN_TU={'ON' if args.tu else 'OFF'}",
     ]
     if shutil.which("sccache"):
         cmake_configure_args += [
