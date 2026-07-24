@@ -23,3 +23,13 @@
 0x826E41A8 = {} # prevents the game from starting
 0x82328F28 = {} # compiler warning unresolved function
 
+[[switch_tables]]
+address = 0x8236ba84   # the bctr instruction inside sub_8236BA68
+register = 9            # r9 — the real index register (extsh r9,r11)
+labels = [
+  0x8236BA88,
+  0x8236BC28,
+  0x8236BD80,
+  0x8236BE48,
+]
+
