@@ -36,7 +36,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: "SF3TSOE Reborn ${{ github.ref_name }}"
-          body: "# Currently in-menu only!\n\n"
+          body: "# We are in-game!\n\n"
           files: release-assets/*
           generate_release_notes: true
           fail_on_unmatched_files: true
