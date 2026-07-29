@@ -31,7 +31,7 @@ class Sf3tsoerebornApp : public rex::ReXApp {
     // validated at Setup() alongside `requires`/`conflicts` -- see
     // docs/making-mods.md. Derived from the nearest git tag at configure
     // time (src/version.generated.h, see CMakeLists.txt).
-    config.game_version = sf3tsoereborn::kVersionString;
+    //config.game_version = sf3tsoereborn::kVersionString;
 
     #ifdef _WIN32
         timeBeginPeriod(1);

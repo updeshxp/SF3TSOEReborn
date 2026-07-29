@@ -19,92 +19,10 @@
 #   memmove = 0x8XXXXXXX
 
 [functions]
-0x826070F8 = {} # prevents the game from compiling
-0x826E41A8 = {} # prevents the game from starting
-0x82328F28 = {} # compiler warning unresolved function
-0x82399940 = {} # crashes the game after Fight starts
-0x82376628 = {} # unresolved call target
-0x823767C0 = {} # unresolved call target
-
-0x822F0EB4 = { parent = 0x822F0E28 }
-0x822F0F44 = { parent = 0x822F0E28 }
-0x822F0F8C = { parent = 0x822F0E28 }
-0x822F0FE0 = { parent = 0x822F0E28 }
-0x822F1034 = { parent = 0x822F0E28 }
-0x822F1088 = { parent = 0x822F0E28 }
-0x822F10C8 = { parent = 0x822F0E28 }
-0x822F10FC = { parent = 0x822F0E28 }
-0x822F113C = { parent = 0x822F0E28 }
-0x822F116C = { parent = 0x822F0E28 }
-0x822F114C = { parent = 0x822F0E28 }
-0x822F1198 = { parent = 0x822F0E28 }
-0x822F11A0 = { parent = 0x822F0E28 }
-
-0x82375D88 = { parent = 0x82375D38 }
-0x82375F00 = { parent = 0x82375D38 }
-0x82376198 = { parent = 0x82375D38 }
-0x82376808 = { parent = 0x82375D38 }
-0x82376AB8 = { parent = 0x82375D38 }
-0x82376D30 = { parent = 0x82375D38 }
-0x82376E90 = { parent = 0x82375D38 }
-0x82377000 = { parent = 0x82375D38 }
-0x823771A8 = { parent = 0x82375D38 }
-0x823772B8 = { parent = 0x82375D38 }
-0x82377400 = { parent = 0x82375D38 }
-0x82377568 = { parent = 0x82375D38 }
-0x823777E8 = { parent = 0x82375D38 }
-0x82377A70 = { parent = 0x82375D38 }
-0x82377CF0 = { parent = 0x82375D38 }
-0x82377E98 = { parent = 0x82375D38 }
-0x82378008 = { parent = 0x82375D38 }
-0x823781A0 = { parent = 0x82375D38 }
-0x82378348 = { parent = 0x82375D38 }
-0x823785A0 = { parent = 0x82375D38 }
-0x82378828 = { parent = 0x82375D38 }
-0x823789A8 = { parent = 0x82375D38 }
-0x82378C70 = { parent = 0x82375D38 }
-0x82378E20 = { parent = 0x82375D38 }
-0x82379078 = { parent = 0x82375D38 }
-0x823792D8 = { parent = 0x82375D38 }
-0x823794B0 = { parent = 0x82375D38 }
-0x82379800 = { parent = 0x82375D38 }
-
-[[switch_tables]]
-address = 0x8236ba84   # the bctr instruction inside sub_8236BA68
-register = 9            # r9 — the real index register (extsh r9,r11)
-labels = [
-  0x8236BA88,
-  0x8236BC28,
-  0x8236BD80,
-  0x8236BE48,
-]
-
-[[switch_tables]]
-address = 0x822F0E84   # the bctr instruction inside sub_822F0E28
-register = 11           # r11 — confirmed correct via the cmplwi range checks before the switch
-labels = [
-  0x822F0EB4,   # case 0
-  0x822F0F44,   # case 1
-  0x822F0F8C,   # case 2
-  0x822F0FE0,   # case 3
-  0x822F1034,   # case 4
-  0x822F1088,   # case 5
-  0x822F10C8,   # case 6
-  0x822F10FC,   # case 7
-  0x822F113C,   # case 8
-  0x822F116C,   # case 9
-  0x822F114C,   # case 10
-]
-
-[[switch_tables]]
-address = 0x82375d84
-register = 9
-labels = [
-  0x82375D88, 0x82375F00, 0x82376198, 0x82376808,
-  0x82376AB8, 0x82376D30, 0x82376E90, 0x82377000,
-  0x823771A8, 0x823772B8, 0x82377400, 0x82377568,
-  0x823777E8, 0x82377A70, 0x82377CF0, 0x82377E98,
-  0x82378008, 0x823781A0, 0x82378348, 0x823785A0,
-  0x82378828, 0x823789A8, 0x82378C70, 0x82378E20,
-  0x82379078, 0x823792D8, 0x823794B0, 0x82379800,
-]
+0x829EFDC8 = {}
+0x829EE260 = {}
+0x826070F8 = {}
+0x829F1080 = {}
+0x82328F28 = {}
+0x8288C168 = {}
+0x829E476C = {}
