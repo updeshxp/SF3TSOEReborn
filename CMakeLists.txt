@@ -73,3 +73,13 @@ else()
 endif()
 
 rexglue_setup_target(sf3tsoereborn)
+# Title-update builds: the achievements bridge hooks the game's XAM thunks by
+# their hardcoded vanilla guest addresses (sub_825D8028 etc.). The title update
+# relocates the whole image, so those addresses don't exist in the patched image
+# and codegen never emits the matching sub_* bodies. -DSF3TSOEREBORN_TU=ON compiles
+# those hooks out (the achievements overlay is simply inert in TU builds); the
+# regular build leaves it OFF and keeps the feature. Set by scripts/build.py --tu.
+option(SF3TSOEREBORN_TU "Build for a baked-in title update (disables vanilla-address hooks)" OFF)
+if(SF3TSOEREBORN_TU)
+    target_compile_definitions(sf3tsoereborn PRIVATE SF3TSOEREBORN_TU=1)
+endif()

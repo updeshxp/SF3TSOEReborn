@@ -3,7 +3,6 @@
 [project]
 name = "sf3tsoereborn"
 sdk_version = ""
-game_root = "assets"
 
 [entrypoint]
 file_path = "assets/default.xex"

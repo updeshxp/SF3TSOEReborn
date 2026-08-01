@@ -1,10 +1,11 @@
 gpu_plugin = "xenos"
 license_mask = 1
 mnk_capture_mouse = false
-log_level = "trace"
 mnk_mode = true
 game_data_root = "./assets"
 user_data_root = "./data"
+update_data_root = "./update"
+user_name = "DroidSavior"
 
 keybind_a = "J"					# Low Kick
 keybind_b = "K"					# Mid Kick

@@ -48,11 +48,14 @@ sf3sf3tsoereborn.toml
 *.iso
 /assets/
 /data/
+/58410B16/
+668F6438875758443BE617C4AC63FB30B52981D258
 !/assets/.gitkeep
 
 # Title-update packages and anything extracted from them (copyrighted; the user
 # supplies their own — see scripts/extract_tu.py)
 /TU_*
+tu00000003_00000000
 /update/
 *.xexp
 
