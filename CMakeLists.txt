@@ -44,15 +44,36 @@ configure_file(
 # XEX or the generator script changes.
 find_package(Python3 COMPONENTS Interpreter REQUIRED)
 set(SF3TSOEREBORN_ICON_HEADER ${CMAKE_SOURCE_DIR}/src/icon.generated.h)
+set(SF3TSOEREBORN_ICON_ICO ${CMAKE_SOURCE_DIR}/src/icon.generated.ico)
 add_custom_command(
-    OUTPUT ${SF3TSOEREBORN_ICON_HEADER}
+    OUTPUT ${SF3TSOEREBORN_ICON_HEADER} ${SF3TSOEREBORN_ICON_ICO}
     COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/gen-icon.py
     DEPENDS
         ${CMAKE_SOURCE_DIR}/scripts/gen-icon.py
         ${CMAKE_SOURCE_DIR}/assets/default.xex
-    COMMENT "Generating src/icon.generated.h"
+    COMMENT "Generating src/icon.generated.h and src/icon.generated.ico"
     VERBATIM
 )
+
+# On Windows, also embed the same icon as the .exe's own resource (Explorer,
+# taskbar before the window opens, Alt-Tab), separate from the in-window icon
+# applied at runtime via Window::SetIcon (see sf3tsoereborn_app.h). The .rc
+# needs an absolute path to the .ico since it's not necessarily emitted next
+# to it in an out-of-source build.
+if(WIN32)
+    set(SF3TSOEREBORN_ICON_ICO_PATH ${SF3TSOEREBORN_ICON_ICO})
+    set(SF3TSOEREBORN_ICON_RC ${CMAKE_SOURCE_DIR}/src/sf3tsoereborn.generated.rc)
+    configure_file(
+        ${CMAKE_SOURCE_DIR}/src/sf3tsoereborn.rc.in
+        ${SF3TSOEREBORN_ICON_RC}
+        @ONLY
+    )
+    # rc.exe needs icon.generated.ico to exist by the time it compiles this
+    # .rc; configure_file only stamped the path into it above, it doesn't
+    # establish a build-order dependency on the custom command that (re)writes
+    # the .ico itself.
+    set_source_files_properties(${SF3TSOEREBORN_ICON_RC} PROPERTIES OBJECT_DEPENDS ${SF3TSOEREBORN_ICON_ICO})
+endif()
 
 # Sources
 set(SF3TSOEREBORN_SOURCES
@@ -63,7 +84,7 @@ set(SF3TSOEREBORN_SOURCES
 )
 
 if(WIN32)
-    add_executable(sf3tsoereborn WIN32 ${SF3TSOEREBORN_SOURCES})
+    add_executable(sf3tsoereborn WIN32 ${SF3TSOEREBORN_SOURCES} ${SF3TSOEREBORN_ICON_RC})
 else()
     add_executable(sf3tsoereborn ${SF3TSOEREBORN_SOURCES})
     set_target_properties(sf3tsoereborn PROPERTIES
