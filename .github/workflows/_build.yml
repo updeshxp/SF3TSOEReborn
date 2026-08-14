@@ -22,7 +22,7 @@ env:
   ASSETS_REPO: ${{ vars.ASSETS_REPO }}
   CODEGEN_ASSETS: default.xex Gameicon.png
   ASSET_CACHE_KEY: codegen-assets-v2
-  TU_ASSET_CACHE_KEY: tu-assets-v1
+  TU_ASSET_CACHE_KEY: tu-assets-v4
 
 jobs:
   build:
@@ -107,22 +107,21 @@ jobs:
 
       - name: Cache TU packages
         id: tu-cache
-        if: matrix.platform != 'linux-arm64'
         uses: actions/cache@v5
         with:
           path: tu_packages/
           key: ${{ env.TU_ASSET_CACHE_KEY }}
 
       - name: Fetch TU packages
-        if: matrix.platform != 'linux-arm64' && steps.tu-cache.outputs.cache-hit != 'true'
+        if: steps.tu-cache.outputs.cache-hit != 'true'
         env:
           GH_TOKEN: ${{ secrets.ASSETS_TOKEN }}
         shell: bash
         run: |
           mkdir -p tu_packages
 
-          files=$(gh api "repos/${{ env.ASSETS_REPO }}/contents" \
-            --jq '.[] | select(.name | startswith("TU_")) | .name')
+          files=$(gh api "repos/${{ env.ASSETS_REPO }}/contents/tu_packages/${f}" \
+            --jq '.[] | select(.name | startswith("tu")) | .name')
 
           if [ -z "$files" ]; then
             echo "No TU packages found."
@@ -131,17 +130,16 @@ jobs:
 
           for f in $files; do
             gh api -H "Accept: application/vnd.github.raw" \
-              "repos/${{ env.ASSETS_REPO }}/contents/${f}" \
+              "repos/${{ env.ASSETS_REPO }}/contents/tu_packages/${f}" \
               > "tu_packages/${f}"
             echo "Fetched ${f} ($(wc -c < "tu_packages/${f}") bytes)"
           done
       
       - name: Detect TU packages
         id: tu
-        if: matrix.platform != 'linux-arm64'
         shell: bash
         run: |
-          if compgen -G "tu_packages/TU_*" > /dev/null; then
+          if compgen -G "tu_packages/tu*" > /dev/null; then
             echo "has_tu=true" >> "$GITHUB_OUTPUT"
             echo "TU packages detected."
           else
@@ -188,12 +186,12 @@ jobs:
           if-no-files-found: error
 
       - name: Build (tu)
-        if: matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        if: steps.tu.outputs.has_tu == 'true'
         shell: bash
         run: python scripts/build.py --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
 
       - name: Package (tu)
-        if: matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        if: steps.tu.outputs.has_tu == 'true'
         shell: bash
         run: |
           if [ "${{ inputs.publish_mode }}" = "artifact" ]; then
@@ -204,7 +202,7 @@ jobs:
           python scripts/build.py --package "${out}"
 
       - name: Upload CI artifact (tu)
-        if: inputs.publish_mode == 'artifact' && matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        if: inputs.publish_mode == 'artifact' && steps.tu.outputs.has_tu == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}-tu-${{ matrix.artifact_suffix }}
@@ -212,7 +210,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload release artifact (tu)
-        if: inputs.publish_mode == 'release' && matrix.platform != 'linux-arm64' && steps.tu.outputs.has_tu == 'true'
+        if: inputs.publish_mode == 'release' && steps.tu.outputs.has_tu == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: release-tu-${{ matrix.platform }}

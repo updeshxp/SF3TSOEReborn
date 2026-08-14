@@ -1,19 +1,15 @@
-gpu_plugin = "xenos"
 license_mask = 1
 mnk_capture_mouse = false
+log_level = "debug"
 mnk_mode = true
 game_data_root = "./assets"
 user_data_root = "./data"
-gpu_allow_invalid_fetch_constants = true
-clear_memory_page_state = false	
-scribble_heap = true
-fullscreen = true
-postprocess_scaling_and_sharpening = "fsr"
-readback_resolve = "none"
-occlusion_query = "strict"
+update_data_root = "./update"
 user_name = "DroidSavior"
-readback_memexport = true
-resolution = "1080p"
+gpu_allow_invalid_fetch_constants = true
+clear_memory_page_state = false
+gpu_plugin = "xenos"
+gpu_backend = "vulkan"
 
 keybind_a = "J"					# Low Kick
 keybind_b = "K"					# Mid Kick

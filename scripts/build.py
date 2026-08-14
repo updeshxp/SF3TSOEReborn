@@ -261,7 +261,7 @@ def stage_title_update(tu_args, xex_path):
     packages = []
     for arg in tu_args:
         if os.path.isdir(arg):
-            packages += sorted(glob.glob(os.path.join(arg, "TU_*")))
+            packages += sorted(glob.glob(os.path.join(arg, "tu*")))
         else:
             packages.append(arg)
     if not packages:
