@@ -3,9 +3,8 @@
 Static recompilation of **Street Fighter III: 3rd Strike Online Edition** (Xbox Live Arcade) for Windows
 and Linux, built on the [ReXGlue SDK](https://github.com/rexglue/rexglue-sdk).
 
-This project converts the Xbox 360 PowerPC `default.xex` into native x86_64
-code at build time, then wraps it with a small host runtime (logging,
-overlays, hooks) so the game runs natively and can be modded like a PC port.
+This project converts the Xbox 360 PowerPC `default.xex` into native x86_64 and arm64 executable at build time, then wraps it with a small host runtime (logging,
+overlays, hooks) while visible rendering currently remains authoritative in the vendored RexGlue/Xenia graphics backend.
 
 **You must own the game.** This project does **not** ship any copyrighted code, data, or assets. You provide your own legally dumped game.
 
