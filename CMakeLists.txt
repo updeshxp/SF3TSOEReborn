@@ -78,6 +78,7 @@ endif()
 # Sources
 set(SF3TSOEREBORN_SOURCES
     src/main.cpp
+    src/settings.cpp
     src/xbox_live.cpp
     ${SF3TSOEREBORN_ICON_HEADER}
     ${GENERATED_SOURCES}
