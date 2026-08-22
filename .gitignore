@@ -27,7 +27,7 @@ src/main.cpp.bak
 
 # Windows exe-icon resource script, rewritten by CMake with an absolute path
 # to src/icon.generated.ico (see CMakeLists.txt)
-/src/sf3sf3tsoereborn.generated.rc
+/src/sf3tsoereborn.generated.rc
 
 # Project version header, rewritten from the nearest git tag on every CMake
 # configure (see CMakeLists.txt)

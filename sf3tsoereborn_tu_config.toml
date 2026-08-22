@@ -16,7 +16,7 @@
 0x82C43920 = {} # prevents the game from compiling
 0x82AC5130 = {} # prevents the game from compiling
 0x826D0890 = {} # prevents the game from compiling
-0x823C6348 = {} # crashes the game after selecting fighter
+0x823C6348 = { size = 0xCC } # crashes the game after selecting fighter
 0x827AEB70 = {} # unresolved call target
 0x82437470 = {} # unresolved call target - crashes the game after Fight starts
 
@@ -36,89 +36,6 @@
 0x82BEFD98 = {}
 0x82F627A0 = {}
 
-
-0x823F4378 = { parent = 0x823F41B8 }
-0x823F44D0 = { parent = 0x823F41B8 }
-0x823F4598 = { parent = 0x823F41B8 }
-
-0x8238E004 = { parent = 0x8238DF78 }
-0x8238E094 = { parent = 0x8238DF78 }
-0x8238E0DC = { parent = 0x8238DF78 }
-0x8238E130 = { parent = 0x8238DF78 }
-0x8238E184 = { parent = 0x8238DF78 }
-0x8238E1D8 = { parent = 0x8238DF78 }
-0x8238E218 = { parent = 0x8238DF78 }
-0x8238E24C = { parent = 0x8238DF78 }
-0x8238E28C = { parent = 0x8238DF78 }
-0x8238E2BC = { parent = 0x8238DF78 }
-0x8238E29C = { parent = 0x8238DF78 }
-0x8238E2E8 = { parent = 0x8238DF78 }
-0x8238E2F0 = { parent = 0x8238DF78 }
-
-0x824139C8 = { parent = 0x82413570 }
-0x82414038 = { parent = 0x82413570 }
-0x824142E8 = { parent = 0x82413570 }
-0x82414560 = { parent = 0x82413570 }
-0x824146C0 = { parent = 0x82413570 }
-0x82414830 = { parent = 0x82413570 }
-0x824149D8 = { parent = 0x82413570 }
-0x82414AE8 = { parent = 0x82413570 }
-0x82414C30 = { parent = 0x82413570 }
-0x82414D98 = { parent = 0x82413570 }
-0x82415018 = { parent = 0x82413570 }
-0x824152A0 = { parent = 0x82413570 }
-0x82415520 = { parent = 0x82413570 }
-0x824156C8 = { parent = 0x82413570 }
-0x82415838 = { parent = 0x82413570 }
-0x824159D0 = { parent = 0x82413570 }
-0x82415B78 = { parent = 0x82413570 }
-0x82415DD0 = { parent = 0x82413570 }
-0x82416058 = { parent = 0x82413570 }
-0x824161D8 = { parent = 0x82413570 }
-0x824164A0 = { parent = 0x82413570 }
-0x82416650 = { parent = 0x82413570 }
-0x824168A8 = { parent = 0x82413570 }
-0x82416B08 = { parent = 0x82413570 }
-0x82416CE0 = { parent = 0x82413570 }
-0x82417030 = { parent = 0x82413570 }
-
-
-[[switch_tables]]  # shifted by 88750 (relocated from 0x8236BA84)
-address = 0x823F41D4
-register = 9
-labels = [
-  0x823F41D8,
-  0x823F4378,
-  0x823F44D0,
-  0x823F4598,
-]
-
-[[switch_tables]]  # shifted by 9D150 (relocated from 0x822F0E84)
-address = 0x8238DFD4
-register = 11
-labels = [
-  0x8238E004,   # case 0
-  0x8238E094,   # case 1
-  0x8238E0DC,   # case 2
-  0x8238E130,   # case 3
-  0x8238E184,   # case 4
-  0x8238E1D8,   # case 5
-  0x8238E218,   # case 6
-  0x8238E24C,   # case 7
-  0x8238E28C,   # case 8
-  0x8238E2BC,   # case 9
-  0x8238E29C,   # case 10
-]
-
-[[switch_tables]] # shifted by 9D838 (relocated from 0x82375d84)
-address = 0x824135BC
-register = 9
-labels = [
-  0x824135C0, 0x82413738, 0x824139C8, 0x82414038,
-  0x824142E8, 0x82414560, 0x824146C0, 0x82414830,
-  0x824149D8, 0x82414AE8, 0x82414C30, 0x82414D98,
-  0x82415018, 0x824152A0, 0x82415520, 0x824156C8,
-  0x82415838, 0x824159D0, 0x82415B78, 0x82415DD0,
-  0x82416058, 0x824161D8, 0x824164A0, 0x82416650,
-  0x824168A8, 0x82416B08, 0x82416CE0, 0x82417030,
-]
+0x82ABC618 = { size = 0x4C }
+0x82E002B0 = { size = 0xC }
+0x82F57564 = { size = 0x8 }
