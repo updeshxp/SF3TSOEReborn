@@ -79,14 +79,7 @@ uint32_t XUserCheckPrivilege(uint32_t dwUserIndex, uint32_t dwPrivilege, uint32_
     return ret;
 }
 
-uint32_t XamVoiceSetMicArrayIdleUsers(uint32_t dwUserIndex, uint32_t idle_state) 
-{
-    REXLOG_TRACE("XamVoiceSetMicArrayIdleUsers called, userIndex={}, idle_state={}", dwUserIndex, idle_state);
-    return 0; // X_STATUS_SUCCESS
-}
-
 REX_HOOK(__imp__XamUserCheckPrivilege, XUserCheckPrivilege);
 REX_HOOK(__imp__XamUserGetSigninState, XamUserGetSigninState);
 REX_HOOK(__imp__XamUserGetSigninInfo, XamUserGetSigninInfo);
-REX_HOOK(__imp__XamVoiceSetMicArrayIdleUsers, XamVoiceSetMicArrayIdleUsers);
 

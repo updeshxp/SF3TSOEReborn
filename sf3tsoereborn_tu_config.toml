@@ -16,55 +16,13 @@
 0x82C43920 = {} # prevents the game from compiling
 0x82AC5130 = {} # prevents the game from compiling
 0x826D0890 = {} # prevents the game from compiling
-0x823C6348 = {} # crashes the game after selecting fighter
+0x823C6348 = { size = 0xCC } # crashes the game after selecting fighter
 0x827AEB70 = {} # unresolved call target
 0x82437470 = {} # unresolved call target - crashes the game after Fight starts
 
-0x823F4378 = { parent = 0x823F41B8 }
-0x823F44D0 = { parent = 0x823F41B8 }
-0x823F4598 = { parent = 0x823F41B8 }
-
-0x8238E004 = { parent = 0x8238DF78 }
-0x8238E094 = { parent = 0x8238DF78 }
-0x8238E0DC = { parent = 0x8238DF78 }
-0x8238E130 = { parent = 0x8238DF78 }
-0x8238E184 = { parent = 0x8238DF78 }
-0x8238E1D8 = { parent = 0x8238DF78 }
-0x8238E218 = { parent = 0x8238DF78 }
-0x8238E24C = { parent = 0x8238DF78 }
-0x8238E28C = { parent = 0x8238DF78 }
-0x8238E2BC = { parent = 0x8238DF78 }
-0x8238E29C = { parent = 0x8238DF78 }
-0x8238E2E8 = { parent = 0x8238DF78 }
-0x8238E2F0 = { parent = 0x8238DF78 }
-
-0x824139C8 = { parent = 0x82413570 }
-0x82414038 = { parent = 0x82413570 }
-0x824142E8 = { parent = 0x82413570 }
-0x82414560 = { parent = 0x82413570 }
-0x824146C0 = { parent = 0x82413570 }
-0x82414830 = { parent = 0x82413570 }
-0x824149D8 = { parent = 0x82413570 }
-0x82414AE8 = { parent = 0x82413570 }
-0x82414C30 = { parent = 0x82413570 }
-0x82414D98 = { parent = 0x82413570 }
-0x82415018 = { parent = 0x82413570 }
-0x824152A0 = { parent = 0x82413570 }
-0x82415520 = { parent = 0x82413570 }
-0x824156C8 = { parent = 0x82413570 }
-0x82415838 = { parent = 0x82413570 }
-0x824159D0 = { parent = 0x82413570 }
-0x82415B78 = { parent = 0x82413570 }
-0x82415DD0 = { parent = 0x82413570 }
-0x82416058 = { parent = 0x82413570 }
-0x824161D8 = { parent = 0x82413570 }
-0x824164A0 = { parent = 0x82413570 }
-0x82416650 = { parent = 0x82413570 }
-0x824168A8 = { parent = 0x82413570 }
-0x82416B08 = { parent = 0x82413570 }
-0x82416CE0 = { parent = 0x82413570 }
-0x82417030 = { parent = 0x82413570 }
-
+0x82ABC618 = { size = 0x4C }
+0x82E002B0 = { size = 0xC }
+0x82F57564 = { size = 0x8 }
 
 [[switch_tables]]  # shifted by 88750 (relocated from 0x8236BA84)
 address = 0x823F41D4
