@@ -148,50 +148,43 @@ def do_package(name, project_name, is_windows):
     config_path = os.path.join(pkg_dir, f"{project_name}.toml")
     print(f"+ write {config_path}")
     with open(config_path, "w") as f:
-        f.write("# Preferences\n")
-        f.write("user_name = \"User\"\n")
-        f.write("user_language = 1\n")
-        f.write("\n")
-        f.write("# Graphics settings\n")
-        f.write("gpu_backend = \"any\" # either \"d3d12\", \"vulkan\" or \"any\"\n")
-        f.write("fullscreen = false\n")
-        f.write("resolution = \"720p\" # either \"720p\" or \"1080p\"n")
-        f.write("vulkan_device = -1\n")
-        f.write("\n")
-        f.write("# Dump settings\n")
-        f.write("shader_dump_enabled = false\n")
-        f.write("texture_dump_enabled = false\n")
-        f.write('texture_dump_format = "png"\n')
-        f.write('texture_dump_skip_sizes = "4x4,512x288,1024x576,640x360,1280x720"\n')
-        f.write("\n")
-        f.write("# Keyboard controls\n")
+        f.write('# Preferences\n')
+        f.write('game_data_root = "./assets"\n')
+        f.write('user_data_root = "./data"\n')
+        f.write('update_data_root = "./update"\n')
+        f.write('mnk_capture_mouse = false\n')
+        f.write('mnk_mode = true\n\n')
+        f.write('# User Info\n')
+        f.write('user_name = "User"\n')
+        f.write('user_language = 1\n')
+        f.write('license_mask = 1\n\n')
+        f.write('# Graphics settings\n')
+        f.write('gpu_plugin = "xenos"\n')
+        f.write('gpu_backend = "vulkan" # either "d3d12", "vulkan" or "any"\n')
+        f.write('gpu_allow_invalid_fetch_constants = true\n')
+        f.write('fullscreen = true\n')
+        f.write('resolution = "720p" # either "720p" or "1080p"\n')
+        f.write('vulkan_device = -1\n\n')
+        f.write('# Keyboard controls\n')
         f.write(f'keybind_a = "J"{"\t"*5}# Low Kick\n')
-        f.write(f'keybind_b = "K"{"\t"*5}# Mid Kick\n') 
-        f.write(f'keybind_x = "U"{"\t"*5}# Low Punch\n')  
+        f.write(f'keybind_b = "K"{"\t"*5}# Mid Kick\n')
+        f.write(f'keybind_x = "U"{"\t"*5}# Low Punch\n')
         f.write(f'keybind_y = "I"{"\t"*5}# Mid Punch\n')
-        f.write(f'keybind_left_trigger = "Y"{"\t"*2}# L+M+H Kick\n')   
+        f.write(f'keybind_left_trigger = "Y"{"\t"*3}# L+M+H Kick\n')
         f.write(f'keybind_right_trigger = "L"{"\t"*3}# Heavy Kick\n')
         f.write(f'keybind_left_shoulder = "H"{"\t"*3}# L+M+H Punch\n')
-        f.write(f'keybind_right_shoulder = "O"{"\t"*1}# Heavy Punch\n')
-        f.write(f'keybind_back = "Escape"{"\t"*5}# Select\n')
-        f.write(f'keybind_start = "Return"{"\t"*5}# Start\n')
-        f.write(f'keybind_dpad_up = "Up"\n')
-        f.write(f'keybind_dpad_left = "Left"\n')
-        f.write(f'keybind_dpad_down = "Down"\n')   
-        f.write(f'keybind_dpad_right = "Right"\n')
-        f.write("\n")
-        f.write("# Danger zone\n")
-        f.write('gpu_plugin = "xenos"\n')
-        f.write("gpu_allow_invalid_fetch_constants = true\n")
-        f.write('game_data_root = "assets"\n')
-        f.write('user_data_root = "data\"\n')
-        f.write("license_mask = 1\n")
-        f.write("mnk_mode = true\n")
-
+        f.write(f'keybind_right_shoulder = "O"{"\t"*3}# Heavy Punch\n')
+        f.write(f'keybind_back = "Escape"{"\t"*3}# Select\n')
+        f.write(f'keybind_start = "Return"{"\t"*3}# Start\n')
+        f.write('keybind_dpad_up = "Up"\n')
+        f.write('keybind_dpad_left = "Left"\n')
+        f.write('keybind_dpad_down = "Down"\n')
+        f.write('keybind_dpad_right = "Right"\n')
+        
     script_dir = os.path.dirname(os.path.abspath(__file__))
     pkg_scripts_dir = os.path.join(pkg_dir, "scripts")
     os.makedirs(pkg_scripts_dir, exist_ok=True)
-    for script_name in ("extract_game.py", "extract_tu.py"):
+    for script_name in ("extract_tu.py", "extract_game_xbla.py"):
         src = os.path.join(script_dir, script_name)
         print(f"+ cp {src} {pkg_scripts_dir}/")
         shutil.copy2(src, pkg_scripts_dir)
@@ -201,7 +194,8 @@ def do_package(name, project_name, is_windows):
     print(f"+ cp {readme_src} {pkg_dir}/")
     shutil.copy2(readme_src, pkg_dir)
 
-    os.makedirs(os.path.join(pkg_dir, "game"), exist_ok=True)
+    os.makedirs(os.path.join(pkg_dir, "assets"), exist_ok=True)
+    os.makedirs(os.path.join(pkg_dir, "update"), exist_ok=True)
 
     if is_windows:
         archive_path = f"{name}.zip"
@@ -347,12 +341,31 @@ def main():
     tu_version = None
     sibling_patch = xex_path + "p"
     codegen_manifest = manifest_path
+
+    # TU builds need the normal manifest's config filename to contain the TU
+    # hints as well, because generated CMake/Ninja may invoke codegen again
+    # using the original manifest. Save and restore the original config.
+    original_config_data = None
+    tu_config = None
+
     if args.tu:
         tu_version = stage_title_update(args.tu, xex_path)
         tu_config = "sf3tsoereborn_tu_config.toml"
         if not os.path.exists(tu_config):
             print(f"error: {tu_config} not found (needed for --tu codegen)", file=sys.stderr)
             sys.exit(1)
+
+        with open(base_config, "rb") as f:
+            original_config_data = f.read()
+        with open(tu_config, "rb") as f:
+            tu_config_data = f.read()
+
+        print(f"+ replace {base_config} with {tu_config} for TU build")
+        with open(base_config, "wb") as f:
+            f.write(tu_config_data)
+
+        # Explicit TU codegen continues to use the throwaway manifest.
+        # The normal manifest now also sees TU contents through base_config.
         codegen_manifest = derive_tu_manifest(manifest_path, base_config, tu_config)
     elif os.path.exists(sibling_patch):
         print(f"+ rm {sibling_patch} (not a TU build)")
@@ -414,20 +427,26 @@ def main():
         with open(stamp_path, "w") as f:
             f.write(new_hash)
 
-    run(["cmake", "--preset", preset] + cmake_configure_args)
-    run(["cmake", "--build", "--preset", preset, "--parallel", str(os.cpu_count() or 1)])
-
-    print(f"+ cp {build_output} {exe_name}")
-    shutil.copy2(build_output, exe_name)
-
-    copy_runtime_libs(is_windows, sdk_dir, build_type)
-
-    if tu_version:
-        print(
-            f"\nBuilt with title update v{tu_version}. The matching patch is staged at "
-            f"'{sibling_patch}'\nand is required at runtime — the loader re-applies it to "
-            f"the base image on launch. Run with scripts/run.py."
-        )
+    try:
+            run(["cmake", "--preset", preset] + cmake_configure_args)
+            run(["cmake", "--build", "--preset", preset, "--parallel", str(os.cpu_count() or 1)])
+        
+            print(f"+ cp {build_output} {exe_name}")
+            shutil.copy2(build_output, exe_name)
+        
+            copy_runtime_libs(is_windows, sdk_dir, build_type)
+        
+            if tu_version:
+                print(
+                    f"\nBuilt with title update v{tu_version}. The matching patch is staged at "
+                    f"'{sibling_patch}'\nand is required at runtime — the loader re-applies it to "
+                    f"the base image on launch. Run with scripts/run.py."
+                )
+    finally:
+        if original_config_data is not None:
+            print(f"+ restore {base_config}")
+            with open(base_config, "wb") as f:
+                f.write(original_config_data)
 
 
 if __name__ == "__main__":

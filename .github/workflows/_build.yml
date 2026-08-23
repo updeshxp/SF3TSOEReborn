@@ -156,10 +156,12 @@ jobs:
         run: python scripts/download-sdk.py "sdk/${{ matrix.sdk_dir }}" --pinned
 
       - name: Build (vanilla)
+        if: steps.tu.outputs.has_tu != 'true'
         shell: bash
         run: python scripts/build.py --release --sdk-dir sdk/${{ matrix.sdk_dir }}
 
       - name: Package (vanilla)
+        if: steps.tu.outputs.has_tu != 'true'
         shell: bash
         run: |
           if [ "${{ inputs.publish_mode }}" = "artifact" ]; then
@@ -170,7 +172,7 @@ jobs:
           python scripts/build.py --package "${out}"
 
       - name: Upload CI artifact (vanilla)
-        if: inputs.publish_mode == 'artifact'
+        if: steps.tu.outputs.has_tu != 'true' && inputs.publish_mode == 'artifact'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artifact_name }}-${{ matrix.artifact_suffix }}
@@ -178,7 +180,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload release artifact (vanilla)
-        if: inputs.publish_mode == 'release'
+        if: steps.tu.outputs.has_tu != 'true' && inputs.publish_mode == 'release'
         uses: actions/upload-artifact@v4
         with:
           name: release-vanilla-${{ matrix.platform }}
@@ -188,7 +190,7 @@ jobs:
       - name: Build (tu)
         if: steps.tu.outputs.has_tu == 'true'
         shell: bash
-        run: python scripts/build.py --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
+        run: python scripts/build.py --release --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
 
       - name: Package (tu)
         if: steps.tu.outputs.has_tu == 'true'

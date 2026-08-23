@@ -82,3 +82,4 @@ uint32_t XUserCheckPrivilege(uint32_t dwUserIndex, uint32_t dwPrivilege, uint32_
 REX_HOOK(__imp__XamUserCheckPrivilege, XUserCheckPrivilege);
 REX_HOOK(__imp__XamUserGetSigninState, XamUserGetSigninState);
 REX_HOOK(__imp__XamUserGetSigninInfo, XamUserGetSigninInfo);
+

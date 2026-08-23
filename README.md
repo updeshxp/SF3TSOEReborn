@@ -8,12 +8,19 @@ overlays, hooks) while visible rendering currently remains authoritative in the 
 
 **You must own the game.** This project does **not** ship any copyrighted code, data, or assets. You provide your own legally dumped game.
 
+## What You Need
+
+- Python 3.10 or newer for the extraction helper.
+- A Street Fighter III: 3rd Strike Online Edition Xbox 360 STFS package. The expected title id
+  is `58410B16`, and XBLA packages normally live under a path like:
+
+```text
+...\58410B16\000D0000\<long package file name>
+```
 Do this:
 
-1. Install Python if you don't have it already
-2. Extract the release you just downloaded
-4. Copy your legally obtained game ISO inside the release directory
-5. Run `python scripts/extract_game.py` from the release directory
+1. Extract the release you just downloaded
+2. Run `python scripts/extract_game_xbla.py` from the release directory and extract game assets in assets/ folder.
 
 Finally, run the game executable to play the game.
 
@@ -46,10 +53,10 @@ python scripts/download-sdk.py --pinned
 
 ### 3. Provide your game
 
-Place your legally dumped ISO file into the current directory, then extract it into `assets/`:
+Place your legally dumped XBLA package into the current directory, then extract it into `assets/`:
 
 ```bash
-python scripts/extract_game.py
+python scripts/extract_game_xbla.py
 ```
 
 ### 4. Build
@@ -93,19 +100,9 @@ user_language = 1 # English
 Keyboard and mouse controls are enabled by default. All bindings are overridable in the **F4** menu or `sf3tsoereborn.toml`. For example:
 
 ```toml
-keybind_a = "U"
+keybind_a = "J"
 keybind_left_trigger = "O"
 ```
-
-### GPU selection
-
-If you have multiple GPUs, you can force a specific one:
-
-```bash
-python scripts/run.py --vulkan_device 1
-```
-
-List available devices by running the game without the flag.
 
 ### Logging
 
