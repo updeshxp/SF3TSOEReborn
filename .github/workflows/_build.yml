@@ -188,7 +188,7 @@ jobs:
       - name: Build (tu)
         if: steps.tu.outputs.has_tu == 'true'
         shell: bash
-        run: python scripts/build.py --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
+        run: python scripts/build.py --release --sdk-dir sdk/${{ matrix.sdk_dir }} --tu tu_packages/
 
       - name: Package (tu)
         if: steps.tu.outputs.has_tu == 'true'

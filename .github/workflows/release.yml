@@ -36,7 +36,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: "SF3TSOE Reborn ${{ github.ref_name }}"
-          body: "# We are in-game!\n\n"
+          body: "# Fully Working with Title update.\nPrefer tu build as it has updated scanlines shader and other fixes.\n\nCopy your extracted xbla package in assets/ and extracted update package in update/ and enjoy the game.\n"
           files: release-assets/*
           generate_release_notes: true
           fail_on_unmatched_files: true
