@@ -26,49 +26,6 @@
 0x82376628 = {} # unresolved call target
 0x823767C0 = {} # unresolved call target
 
-0x822F0EB4 = { parent = 0x822F0E28 }
-0x822F0F44 = { parent = 0x822F0E28 }
-0x822F0F8C = { parent = 0x822F0E28 }
-0x822F0FE0 = { parent = 0x822F0E28 }
-0x822F1034 = { parent = 0x822F0E28 }
-0x822F1088 = { parent = 0x822F0E28 }
-0x822F10C8 = { parent = 0x822F0E28 }
-0x822F10FC = { parent = 0x822F0E28 }
-0x822F113C = { parent = 0x822F0E28 }
-0x822F116C = { parent = 0x822F0E28 }
-0x822F114C = { parent = 0x822F0E28 }
-0x822F1198 = { parent = 0x822F0E28 }
-0x822F11A0 = { parent = 0x822F0E28 }
-
-0x82375D88 = { parent = 0x82375D38 }
-0x82375F00 = { parent = 0x82375D38 }
-0x82376198 = { parent = 0x82375D38 }
-0x82376808 = { parent = 0x82375D38 }
-0x82376AB8 = { parent = 0x82375D38 }
-0x82376D30 = { parent = 0x82375D38 }
-0x82376E90 = { parent = 0x82375D38 }
-0x82377000 = { parent = 0x82375D38 }
-0x823771A8 = { parent = 0x82375D38 }
-0x823772B8 = { parent = 0x82375D38 }
-0x82377400 = { parent = 0x82375D38 }
-0x82377568 = { parent = 0x82375D38 }
-0x823777E8 = { parent = 0x82375D38 }
-0x82377A70 = { parent = 0x82375D38 }
-0x82377CF0 = { parent = 0x82375D38 }
-0x82377E98 = { parent = 0x82375D38 }
-0x82378008 = { parent = 0x82375D38 }
-0x823781A0 = { parent = 0x82375D38 }
-0x82378348 = { parent = 0x82375D38 }
-0x823785A0 = { parent = 0x82375D38 }
-0x82378828 = { parent = 0x82375D38 }
-0x823789A8 = { parent = 0x82375D38 }
-0x82378C70 = { parent = 0x82375D38 }
-0x82378E20 = { parent = 0x82375D38 }
-0x82379078 = { parent = 0x82375D38 }
-0x823792D8 = { parent = 0x82375D38 }
-0x823794B0 = { parent = 0x82375D38 }
-0x82379800 = { parent = 0x82375D38 }
-
 [[switch_tables]]
 address = 0x8236ba84   # the bctr instruction inside sub_8236BA68
 register = 9            # r9 — the real index register (extsh r9,r11)
