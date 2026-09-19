@@ -20,6 +20,24 @@
 0x827AEB70 = {} # unresolved call target
 0x82437470 = {} # unresolved call target - crashes the game after Fight starts
 
+0x82BD7DA0 = {}
+0x82BEFD88 = {}
+0x82F64418 = {}
+0x82A1B8E0 = {}
+0x82B4DF10 = {}
+0x828A02B8 = {}
+0x82F65750 = {}
+0x82BEFCE8 = {}
+0x82AC7498 = {}
+0x82B4DD50 = {}
+0x82BEFCE0 = {}
+0x82BEFCF0 = {}
+0x82BEFD90 = {}
+0x82BEFD98 = {}
+0x82F627A0 = {}
+0x82F59B00 = {}
+0x82F5F3C0 = {}
+
 0x82ABC618 = { size = 0x4C }
 0x82E002B0 = { size = 0xC }
 0x82F57564 = { size = 0x8 }
