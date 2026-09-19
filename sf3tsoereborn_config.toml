@@ -19,55 +19,26 @@
 #   memmove = 0x8XXXXXXX
 
 [functions]
-0x826070F8 = {} # prevents the game from compiling
-0x826E41A8 = {} # prevents the game from starting
-0x82328F28 = {} # compiler warning unresolved function
-0x82399940 = {} # crashes the game after Fight starts
-0x82376628 = {} # unresolved call target
-0x823767C0 = {} # unresolved call target
-
-0x822F0EB4 = { parent = 0x822F0E28 }
-0x822F0F44 = { parent = 0x822F0E28 }
-0x822F0F8C = { parent = 0x822F0E28 }
-0x822F0FE0 = { parent = 0x822F0E28 }
-0x822F1034 = { parent = 0x822F0E28 }
-0x822F1088 = { parent = 0x822F0E28 }
-0x822F10C8 = { parent = 0x822F0E28 }
-0x822F10FC = { parent = 0x822F0E28 }
-0x822F113C = { parent = 0x822F0E28 }
-0x822F116C = { parent = 0x822F0E28 }
-0x822F114C = { parent = 0x822F0E28 }
-0x822F1198 = { parent = 0x822F0E28 }
-0x822F11A0 = { parent = 0x822F0E28 }
-
-0x82375D88 = { parent = 0x82375D38 }
-0x82375F00 = { parent = 0x82375D38 }
-0x82376198 = { parent = 0x82375D38 }
-0x82376808 = { parent = 0x82375D38 }
-0x82376AB8 = { parent = 0x82375D38 }
-0x82376D30 = { parent = 0x82375D38 }
-0x82376E90 = { parent = 0x82375D38 }
-0x82377000 = { parent = 0x82375D38 }
-0x823771A8 = { parent = 0x82375D38 }
-0x823772B8 = { parent = 0x82375D38 }
-0x82377400 = { parent = 0x82375D38 }
-0x82377568 = { parent = 0x82375D38 }
-0x823777E8 = { parent = 0x82375D38 }
-0x82377A70 = { parent = 0x82375D38 }
-0x82377CF0 = { parent = 0x82375D38 }
-0x82377E98 = { parent = 0x82375D38 }
-0x82378008 = { parent = 0x82375D38 }
-0x823781A0 = { parent = 0x82375D38 }
-0x82378348 = { parent = 0x82375D38 }
-0x823785A0 = { parent = 0x82375D38 }
-0x82378828 = { parent = 0x82375D38 }
-0x823789A8 = { parent = 0x82375D38 }
-0x82378C70 = { parent = 0x82375D38 }
-0x82378E20 = { parent = 0x82375D38 }
-0x82379078 = { parent = 0x82375D38 }
-0x823792D8 = { parent = 0x82375D38 }
-0x823794B0 = { parent = 0x82375D38 }
-0x82379800 = { parent = 0x82375D38 }
+0x829EFDC8 = {}
+0x829EE260 = {}
+0x826070F8 = {}
+0x829F1080 = {}
+0x82328F28 = {}
+0x8288C168 = {}
+0x829E476C = {}
+0x826E41A8 = {}
+0x829E5618 = {}
+0x829ED9D8 = {}
+0x82547F30 = {}
+0x82547E58 = {}
+0x8256CB08 = {}
+0x824C9240 = {}
+0x8263B7B8 = {}
+0x8263B788 = {}
+0x8250D310 = {}
+0x829EAED0 = {}
+0x82547F18 = {}
+0x82399940 = {}
 
 [[switch_tables]]
 address = 0x8236ba84   # the bctr instruction inside sub_8236BA68

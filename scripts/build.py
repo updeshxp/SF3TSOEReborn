@@ -341,12 +341,31 @@ def main():
     tu_version = None
     sibling_patch = xex_path + "p"
     codegen_manifest = manifest_path
+
+    # TU builds need the normal manifest's config filename to contain the TU
+    # hints as well, because generated CMake/Ninja may invoke codegen again
+    # using the original manifest. Save and restore the original config.
+    original_config_data = None
+    tu_config = None
+
     if args.tu:
         tu_version = stage_title_update(args.tu, xex_path)
         tu_config = "sf3tsoereborn_tu_config.toml"
         if not os.path.exists(tu_config):
             print(f"error: {tu_config} not found (needed for --tu codegen)", file=sys.stderr)
             sys.exit(1)
+
+        with open(base_config, "rb") as f:
+            original_config_data = f.read()
+        with open(tu_config, "rb") as f:
+            tu_config_data = f.read()
+
+        print(f"+ replace {base_config} with {tu_config} for TU build")
+        with open(base_config, "wb") as f:
+            f.write(tu_config_data)
+
+        # Explicit TU codegen continues to use the throwaway manifest.
+        # The normal manifest now also sees TU contents through base_config.
         codegen_manifest = derive_tu_manifest(manifest_path, base_config, tu_config)
     elif os.path.exists(sibling_patch):
         print(f"+ rm {sibling_patch} (not a TU build)")
@@ -408,20 +427,26 @@ def main():
         with open(stamp_path, "w") as f:
             f.write(new_hash)
 
-    run(["cmake", "--preset", preset] + cmake_configure_args)
-    run(["cmake", "--build", "--preset", preset, "--parallel", str(os.cpu_count() or 1)])
-
-    print(f"+ cp {build_output} {exe_name}")
-    shutil.copy2(build_output, exe_name)
-
-    copy_runtime_libs(is_windows, sdk_dir, build_type)
-
-    if tu_version:
-        print(
-            f"\nBuilt with title update v{tu_version}. The matching patch is staged at "
-            f"'{sibling_patch}'\nand is required at runtime — the loader re-applies it to "
-            f"the base image on launch. Run with scripts/run.py."
-        )
+    try:
+            run(["cmake", "--preset", preset] + cmake_configure_args)
+            run(["cmake", "--build", "--preset", preset, "--parallel", str(os.cpu_count() or 1)])
+        
+            print(f"+ cp {build_output} {exe_name}")
+            shutil.copy2(build_output, exe_name)
+        
+            copy_runtime_libs(is_windows, sdk_dir, build_type)
+        
+            if tu_version:
+                print(
+                    f"\nBuilt with title update v{tu_version}. The matching patch is staged at "
+                    f"'{sibling_patch}'\nand is required at runtime — the loader re-applies it to "
+                    f"the base image on launch. Run with scripts/run.py."
+                )
+    finally:
+        if original_config_data is not None:
+            print(f"+ restore {base_config}")
+            with open(base_config, "wb") as f:
+                f.write(original_config_data)
 
 
 if __name__ == "__main__":
