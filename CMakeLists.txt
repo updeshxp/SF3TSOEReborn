@@ -93,7 +93,7 @@ else()
     )
 endif()
 
-rexglue_setup_target(sf3tsoereborn)
+rexglue_setup_target(sf3tsoereborn GPU_PLUGINS native)
 # Title-update builds: the achievements bridge hooks the game's XAM thunks by
 # their hardcoded vanilla guest addresses (sub_825D8028 etc.). The title update
 # relocates the whole image, so those addresses don't exist in the patched image
