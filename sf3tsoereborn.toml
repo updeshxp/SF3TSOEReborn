@@ -18,9 +18,12 @@ clear_memory_page_state = false
 fullscreen = true
 resolution = "720p" # either "720p" or "1080p"
 vulkan_device = -1
+vsync_follows_gpu = true
 occlusion_query_enable = false
 readback_memexport = false
 readback_memexport_fast = false
+execute_unclipped_draw_vs_on_cpu = true
+execute_unclipped_draw_vs_on_cpu_with_scissor = true
 
 
 # Keyboard controls

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://recomp.fyi/schema/v1.json",
+  "game": "Street Fighter III: 3rd Strike Online Edition",
+  "wikidata": "Q5230754",
+  "system": "Xbox 360",
+  "type": "recomp",
+  "original": {
+    "serial": "58410B16"
+  },
+  "project": "SF3TSOEReborn",
+  "status": "released",
+  "targets": ["Windows", "Linux"],
+  "toolchain": "ReXGlue SDK",
+  "approach": "Static recompilation of the Xbox 360 PowerPC default.xex to native x86_64/arm64 at build time, wrapped in a small host runtime; rendering goes through the vendored RexGlue/Xenia graphics backend",
+  "maintainers": [
+    { "name": "updeshxp", "link": "https://github.com/updeshxp" }
+  ],
+  "links": [
+    { "label": "ReXGlue SDK", "url": "https://github.com/rexglue/rexglue-sdk" },
+    { "label": "Wikipedia", "url": "https://en.wikipedia.org/wiki/Street_Fighter_III:_3rd_Strike" }
+  ],
+  "help": [
+    "Native renderer to replace the vendored RexGlue/Xenia graphics backend",
+    "Netplay support"
+  ],
+  "tags": ["street-fighter", "sf3", "3rd-strike", "fighting-game", "capcom", "xbla", "xbox-live-arcade", "xenia", "rexglue", "netplay"],
+  "notes": "Expects the latest title update (tu00000003_00000000, MediaID 6981678F). Visible rendering currently runs through the RexGlue/Xenia graphics backend."
+}
