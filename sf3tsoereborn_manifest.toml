@@ -2,7 +2,7 @@
 
 [project]
 name = "sf3tsoereborn"
-sdk_version = ""
+sdk_version = "0.10.0"
 
 [entrypoint]
 file_path = "assets/default.xex"

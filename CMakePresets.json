@@ -52,13 +52,17 @@
             "name": "win-amd64-debug",
             "displayName": "Windows AMD64 Debug",
             "inherits": "windows-base",
-            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug", 
+                "REXGLUE_USE_D3D12": "OFF",
+                "REXGLUE_USE_VULKAN": "ON" }
         },
         {
             "name": "win-amd64-release",
             "displayName": "Windows AMD64 Release",
             "inherits": "windows-base",
-            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release", 
+                "REXGLUE_USE_D3D12": "OFF",
+                "REXGLUE_USE_VULKAN": "ON" }
         },
         {
             "name": "linux-amd64-debug",
@@ -76,7 +80,9 @@
             "name": "win-amd64-relwithdebinfo",
             "displayName": "Windows AMD64 RelWithDebInfo",
             "inherits": "windows-base",
-            "cacheVariables": { "CMAKE_BUILD_TYPE": "RelWithDebInfo" }
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "REXGLUE_USE_D3D12": "OFF",
+                "REXGLUE_USE_VULKAN": "ON" }
         },
         {
             "name": "linux-amd64-relwithdebinfo",
