@@ -19,6 +19,7 @@
 0x823C6348 = { size = 0xCC } # crashes the game after selecting fighter
 0x827AEB70 = {} # unresolved call target
 0x82437470 = {} # unresolved call target - crashes the game after Fight starts
+0x82F57580 = {} # unresolved call target
 
 0x82ABC618 = { size = 0x4C }
 0x82E002B0 = { size = 0xC }

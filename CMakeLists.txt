@@ -90,6 +90,7 @@ else()
     set_target_properties(sf3tsoereborn PROPERTIES
         BUILD_RPATH "$ORIGIN"
         INSTALL_RPATH "$ORIGIN"
+        ENABLE_EXPORTS ON
     )
 endif()
 
