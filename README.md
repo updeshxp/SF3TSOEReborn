@@ -8,9 +8,8 @@ overlays, hooks) while visible rendering currently remains authoritative in the 
 
 **You must own the game.** This project does **not** ship any copyrighted code, data, or assets. You provide your own legally dumped game.
 
-## What You Need
+## What You need to do to play
 
-- Python 3.10 or newer for the extraction helper.
 - A Street Fighter III: 3rd Strike Online Edition Xbox 360 STFS package. The expected title id
   is `58410B16`, and XBLA packages normally live under a path like:
 
@@ -21,11 +20,11 @@ overlays, hooks) while visible rendering currently remains authoritative in the 
 
 Do this:
 
-1. Extract the release you just downloaded
-2. Run `python scripts/extract_game_xbla.py` from the release directory and extract game assets in assets/ folder.
-3. Run `python scripts/extract_tu.py` to extract title update `tu00000003_00000000` with `MediaID: 6981678F` in updates/ folder and default.xexp in assets folder.
+1. Extract the release you just downloaded.
+2. Run sf3tsoereborn executable and select the xbla package and title update `tu00000003_00000000` when prompted.
+3. Wait till all assets are extracted and game starts.
 
-Finally, run the game executable to play the game.
+Finally, enjoy the game on your system.
 
 ## Building from scratch (development)
 
