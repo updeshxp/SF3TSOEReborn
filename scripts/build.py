@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import atexit
 import hashlib
 import os
 import sys
@@ -322,18 +323,22 @@ def stage_title_update(tu_args, xex_path):
 
 
 def derive_tu_manifest(manifest_path, base_config, tu_config):
-    """Write a throwaway manifest that points codegen at the standalone TU config.
+    """Point the project manifest at the standalone TU config, in place.
 
     The vanilla manifest/config target the unpatched image; the TU config is a
-    standalone set of hints for the patched image. Returns the temp manifest path.
+    standalone set of hints for the patched image. It has to be the real
+    *_manifest.toml, not a side file: generated/rexglue.cmake's codegen custom
+    command always runs against that filename.
+
+    Returns the ORIGINAL manifest text so the caller can put it back -- without
+    that, the swap outlives the build: the working tree stays dirty and a later
+    vanilla build reads the TU config as its base config.
     """
-    manifest_text = open(manifest_path).read().replace(
-        f'"{base_config}"', f'"{tu_config}"'
-    )
-    # replace '*_manifest.toml'
+    with open(manifest_path) as f:
+        original_text = f.read()
     with open(manifest_path, "w") as f:
-        f.write(manifest_text)
-    return
+        f.write(original_text.replace(f'"{base_config}"', f'"{tu_config}"'))
+    return original_text
 
 
 def main():
@@ -387,7 +392,17 @@ def main():
         if not os.path.exists(tu_config):
             print(f"error: {tu_config} not found (needed for --tu codegen)", file=sys.stderr)
             sys.exit(1)
-        derive_tu_manifest(manifest_path, base_config, tu_config)
+        original_manifest = derive_tu_manifest(manifest_path, base_config, tu_config)
+
+        # Undo the swap however the script ends (success, failed build, an early
+        # sys.exit, Ctrl-C), then blank the sdk_version codegen re-stamped.
+        def _restore_manifest(path=manifest_path, text=original_manifest):
+            with open(path, "w") as f:
+                f.write(text)
+            blank_manifest_sdk_version(path)
+            print(f"+ restored {path} (TU config swap was temporary)")
+
+        atexit.register(_restore_manifest)
     elif os.path.exists(sibling_patch):
         print(f"+ rm {sibling_patch} (not a TU build)")
         os.remove(sibling_patch)
@@ -423,7 +438,12 @@ def main():
 
     stamp_path = os.path.join("out", "codegen.stamp")
     new_hash = compute_codegen_hash(load_manifest(manifest_path), manifest_path)
-    generated_present = os.path.exists(os.path.join("generated", "sources.cmake"))
+    # Both are written by codegen: sources.cmake is read at configure time (no
+    # recomp library without it) and rexglue.cmake is include()d unconditionally.
+    generated_present = all(
+        os.path.exists(os.path.join("generated", f))
+        for f in ("sources.cmake", "rexglue.cmake")
+    )
     old_hash = None
     if os.path.exists(stamp_path):
         with open(stamp_path, "r") as f:
